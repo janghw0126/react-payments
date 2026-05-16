@@ -13449,7 +13449,15 @@ var CardCVCInput = (0, import_react.forwardRef)(function CardCVCInput(props, ref
 //#region src/components/CardRegister/CardNumberSegmentsInput.tsx
 function CardNumberSegmentsInput(props) {
 	const segmentRefs = (0, import_react.useRef)([]);
+	const prevSegmentCountRef = (0, import_react.useRef)(props.value.length);
 	const segmentLengths = props.brand ? CARD_BRAND_CONFIGS[props.brand].segmentLengths : DEFAULT_SEGMENT_LENGTHS;
+	(0, import_react.useEffect)(() => {
+		if (prevSegmentCountRef.current === 1 && props.value.length > 1) {
+			const firstIncomplete = props.value.findIndex((seg, i) => seg.length < segmentLengths[i]);
+			segmentRefs.current[firstIncomplete === -1 ? 1 : firstIncomplete]?.focus();
+		}
+		prevSegmentCountRef.current = props.value.length;
+	}, [props.value, segmentLengths]);
 	const handleSingleChange = (event) => {
 		props.onChange([event.target.value]);
 	};
@@ -13491,7 +13499,7 @@ function CardNumberSegmentsInput(props) {
 				onChange: handleSegmentChange,
 				isShowError: true,
 				validations: numberSegmentValidations(maxLength),
-				autoFocus: index === 0
+				autoFocus: index === 0 && props.value[0].length < segmentLengths[0]
 			}, index))
 		})]
 	});
