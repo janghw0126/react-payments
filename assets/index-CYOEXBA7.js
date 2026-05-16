@@ -13259,7 +13259,8 @@ var ValidationInput = (0, import_react.forwardRef)(function ValidationInput({ va
 		onChange?.(event);
 	};
 	const handleOnBlur = (event) => {
-		const failedValidation = validations.find((validation) => typeof props.value === "string" && props.value.length && validation.type === "validateOnBlur" && !validation.validator(props.value));
+		const currentValue = event.target.value;
+		const failedValidation = validations.find((validation) => currentValue.length && validation.type === "validateOnBlur" && !validation.validator(currentValue));
 		if (failedValidation) {
 			setInputError(new Error(failedValidation.message));
 			event.target.focus();
