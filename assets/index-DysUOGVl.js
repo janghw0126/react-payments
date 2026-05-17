@@ -13263,7 +13263,6 @@ var ValidationInput = (0, import_react.forwardRef)(function ValidationInput({ va
 		const failedValidation = validations.find((validation) => currentValue.length && validation.type === "validateOnBlur" && !validation.validator(currentValue));
 		if (failedValidation) {
 			setInputError(new Error(failedValidation.message));
-			event.target.focus();
 			return;
 		}
 		setInputError(null);
@@ -13448,13 +13447,13 @@ var CardCVCInput = (0, import_react.forwardRef)(function CardCVCInput(props, ref
 //#endregion
 //#region src/components/CardRegister/CardNumberSegmentsInput.tsx
 function CardNumberSegmentsInput(props) {
-	const segmentRefs = (0, import_react.useRef)([]);
+	const segmentInputRefs = (0, import_react.useRef)([]);
 	const prevSegmentCountRef = (0, import_react.useRef)(props.value.length);
 	const segmentLengths = props.brand ? CARD_BRAND_CONFIGS[props.brand].segmentLengths : DEFAULT_SEGMENT_LENGTHS;
 	(0, import_react.useEffect)(() => {
 		if (prevSegmentCountRef.current === 1 && props.value.length > 1) {
-			const firstIncomplete = props.value.findIndex((seg, i) => seg.length < segmentLengths[i]);
-			segmentRefs.current[firstIncomplete === -1 ? 1 : firstIncomplete]?.focus();
+			const isFirstSegmentComplete = props.value[0].length === segmentLengths[0];
+			segmentInputRefs.current[isFirstSegmentComplete ? 1 : 0]?.focus();
 		}
 		prevSegmentCountRef.current = props.value.length;
 	}, [props.value, segmentLengths]);
@@ -13466,7 +13465,7 @@ function CardNumberSegmentsInput(props) {
 		const newSegments = [...props.value];
 		newSegments[inputIndex] = event.target.value;
 		props.onChange(newSegments);
-		if (event.target.value.length === segmentLengths[inputIndex]) segmentRefs.current[inputIndex + 1]?.focus();
+		if (event.target.value.length === segmentLengths[inputIndex]) segmentInputRefs.current[inputIndex + 1]?.focus();
 	};
 	if (!props.brand && props.value.length === 1) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Flex, {
 		direction: "column",
@@ -13489,7 +13488,7 @@ function CardNumberSegmentsInput(props) {
 			gap: 10,
 			children: segmentLengths.map((maxLength, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ValidationInput, {
 				ref: (el) => {
-					segmentRefs.current[index] = el;
+					segmentInputRefs.current[index] = el;
 				},
 				"data-index": index,
 				type: "text",
@@ -13508,9 +13507,11 @@ function CardNumberSegmentsInput(props) {
 //#region src/components/CardRegister/CardExpiryDateInput.tsx
 var CardExpiryDateInput = (0, import_react.forwardRef)(function CardExpiryDateInput(props, ref) {
 	const yearRef = (0, import_react.useRef)(null);
+	(0, import_react.useEffect)(() => {
+		if (props.value.expiryMonth.length === 2 && validateMonth(props.value.expiryMonth)) yearRef.current?.focus();
+	}, [props.value.expiryMonth]);
 	const handleChangeMonth = (event) => {
 		props.onChange([event.target.value, props.value.expiryYear]);
-		if (event.target.value.length === 2) setTimeout(() => yearRef.current?.focus(), 0);
 	};
 	const handleChangeYear = (event) => {
 		props.onChange([props.value.expiryMonth, event.target.value]);
@@ -13680,7 +13681,7 @@ var FormSection = (0, import_react.forwardRef)(function FormSection({ isVisible,
 function CardForm(props) {
 	const isCardNumberComplete = (props.brand ? CARD_BRAND_CONFIGS[props.brand].segmentLengths : DEFAULT_SEGMENT_LENGTHS).every((len, i) => props.formState.cardNumberSegments[i]?.length === len);
 	const isCardCompanySelected = !!props.formState.cardCompany;
-	const isExpiryComplete = props.formState.expiryMonth.length === 2 && props.formState.expiryYear.length === 2;
+	const isExpiryComplete = validateMonth(props.formState.expiryMonth) && validateYear(props.formState.expiryYear);
 	const isCvcComplete = props.formState.cvc.length === 3;
 	const cardCompanyRef = (0, import_react.useRef)(null);
 	const expiryRef = (0, import_react.useRef)(null);
