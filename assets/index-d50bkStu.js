@@ -13477,7 +13477,7 @@ var Label = styled.label`
 * LICENSE file in the root directory of this source tree.
 */
 var require_react_jsx_runtime_production = /* @__PURE__ */ __commonJSMin(((exports) => {
-	var REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
+	var REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element");
 	function jsxProd(type, config, maybeKey) {
 		var key = null;
 		void 0 !== maybeKey && (key = "" + maybeKey);
@@ -13495,7 +13495,6 @@ var require_react_jsx_runtime_production = /* @__PURE__ */ __commonJSMin(((expor
 			props: maybeKey
 		};
 	}
-	exports.Fragment = REACT_FRAGMENT_TYPE;
 	exports.jsx = jsxProd;
 	exports.jsxs = jsxProd;
 }));
@@ -14668,29 +14667,35 @@ var AddCardButton = styled.button`
 `;
 function CardDashboardPage() {
 	const navigate = useNavigate();
-	const [cards, setCards] = (0, import_react.useState)(void 0);
+	const [fetchState, setFetchState] = (0, import_react.useState)({ status: "loading" });
 	const [fetchKey, setFetchKey] = (0, import_react.useState)(0);
 	(0, import_react.useEffect)(() => {
 		fetch(`/react-payments/cards`).then((res) => {
 			if (!res.ok) throw new Error();
 			return res.json();
-		}).then((data) => setCards(data)).catch(() => setCards(null));
+		}).then((data) => setFetchState({
+			status: "success",
+			data
+		})).catch(() => setFetchState({ status: "error" }));
 	}, [fetchKey]);
 	const handleRetry = () => {
 		navigate("/cards");
-		setCards(void 0);
+		setFetchState({ status: "loading" });
 		setFetchKey((k) => k + 1);
 	};
 	const handleDelete = async (id) => {
 		if (!window.confirm("카드를 삭제하시겠습니까?")) return;
 		await fetch(`/react-payments/cards/${id}`, { method: "DELETE" });
-		setCards((prev) => (prev ?? []).filter((card) => card.id !== id));
+		setFetchState((prev) => prev.status === "success" ? {
+			status: "success",
+			data: prev.data.filter((card) => card.id !== id)
+		} : prev);
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(View, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(PageTitle, { children: [
 		"보유 카드 (",
-		cards?.length ?? 0,
+		fetchState.status === "success" ? fetchState.data.length : 0,
 		")"
-	] }), cards === void 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Spinner, {}) : cards === null ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(ErrorWrapper, { children: [
+	] }), fetchState.status === "loading" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Spinner, {}) : fetchState.status === "error" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(ErrorWrapper, { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ErrorIcon, { children: "!" }),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ErrorTitle, { children: "카드 목록을 불러올 수 없습니다." }),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ErrorDescription, { children: "잠시 후 다시 시도해 주세요." }),
@@ -14698,7 +14703,7 @@ function CardDashboardPage() {
 			onClick: handleRetry,
 			children: "다시 시도"
 		})
-	] }) : cards.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmptyCardList, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardList, { children: [cards.map((card) => {
+	] }) : fetchState.data.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmptyCardList, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardList, { children: [fetchState.data.map((card) => {
 		const info = ISSUER_INFO[card.issuerCode];
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardItem, { children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardThumbnail, { color: info.color }),
@@ -14715,7 +14720,7 @@ function CardDashboardPage() {
 	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AddCardButton, {
 		onClick: () => navigate("/cards/register"),
 		children: "+ 카드 추가"
-	})] }) })] });
+	})] })] });
 }
 //#endregion
 //#region src/hooks/useCardNumberSegments.ts
