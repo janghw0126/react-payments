@@ -14120,7 +14120,7 @@ function CardForm(props) {
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormSection, {
 				ref: cardCompanyRef,
 				isVisible: isCardNumberComplete,
-				title: "카드사를 선택해주세요",
+				title: "카드사",
 				description: "현재 국내 카드사만 가능합니다.",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardCompany, {
 					value: props.formState.cardCompany,
@@ -14825,7 +14825,16 @@ function App() {
 }
 //#endregion
 //#region src/main.tsx
-async function enableMocking() {}
+async function enableMocking() {
+	const { worker } = await __vitePreload(async () => {
+		const { worker } = await import("./browser-OHgngQBA.js");
+		return { worker };
+	}, []);
+	return worker.start({
+		serviceWorker: { url: "/react-payments/mockServiceWorker.js" },
+		onUnhandledRequest: "bypass"
+	});
+}
 enableMocking().then(() => {
 	(0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 		basename: "/react-payments",
