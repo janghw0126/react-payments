@@ -9913,6 +9913,8 @@ var require_client = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 }));
 //#endregion
 //#region \0vite/preload-helper.js
+var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
+var import_client = require_client();
 var scriptRel = "modulepreload";
 var assetsURL = function(dep) {
 	return "/react-payments/" + dep;
@@ -9973,7 +9975,6 @@ var __vitePreload = function preload(baseModule, deps, importerUrl) {
 };
 //#endregion
 //#region node_modules/react-router/dist/development/chunk-5KNZJZUH.mjs
-var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var PopStateEventType = "popstate";
 function isLocation(obj) {
 	return typeof obj === "object" && obj != null && "pathname" in obj && "search" in obj && "hash" in obj && "state" in obj && "key" in obj;
@@ -10899,6 +10900,30 @@ function DataRoutes2({ routes, manifest, future, state, isStatic, onError }) {
 		onError,
 		future
 	});
+}
+function Navigate({ to, replace: replace2, state, relative }) {
+	invariant(useInRouterContext(), `<Navigate> may be used only in the context of a <Router> component.`);
+	let { static: isStatic } = import_react.useContext(NavigationContext);
+	warning(!isStatic, `<Navigate> must not be used on the initial render in a <StaticRouter>. This is a no-op, but you should modify your code so the <Navigate> is only ever rendered in response to some user interaction or state change.`);
+	let { matches } = import_react.useContext(RouteContext);
+	let { pathname: locationPathname } = useLocation();
+	let navigate = useNavigate();
+	let path = resolveTo(to, getResolveToMatches(matches), locationPathname, relative === "path");
+	let jsonPath = JSON.stringify(path);
+	import_react.useEffect(() => {
+		navigate(JSON.parse(jsonPath), {
+			replace: replace2,
+			state,
+			relative
+		});
+	}, [
+		navigate,
+		jsonPath,
+		relative,
+		replace2,
+		state
+	]);
+	return null;
 }
 function Route(props) {
 	invariant(false, `A <Route> is only ever to be used as the child of <Routes> element, never rendered directly. Please wrap your <Route> in a <Routes>.`);
@@ -11857,7 +11882,6 @@ function useViewTransitionState(to, { relative } = {}) {
 }
 //#endregion
 //#region node_modules/@babel/runtime/helpers/esm/extends.js
-var import_client = require_client();
 function _extends() {
 	return _extends = Object.assign ? Object.assign.bind() : function(n) {
 		for (var e = 1; e < arguments.length; e++) {
@@ -11869,7 +11893,7 @@ function _extends() {
 }
 //#endregion
 //#region node_modules/@emotion/sheet/dist/emotion-sheet.esm.js
-var isDevelopment$2 = false;
+var isDevelopment$3 = false;
 function sheetForTag(tag) {
 	if (tag.sheet) return tag.sheet;
 	/* istanbul ignore next */
@@ -11895,7 +11919,7 @@ var StyleSheet = /* @__PURE__ */ function() {
 			_this.container.insertBefore(tag, before);
 			_this.tags.push(tag);
 		};
-		this.isSpeedy = options.speedy === void 0 ? !isDevelopment$2 : options.speedy;
+		this.isSpeedy = options.speedy === void 0 ? !isDevelopment$3 : options.speedy;
 		this.tags = [];
 		this.ctr = 0;
 		this.nonce = options.nonce;
@@ -12681,6 +12705,187 @@ var createCache = function createCache(options) {
 	return cache;
 };
 //#endregion
+//#region node_modules/hoist-non-react-statics/node_modules/react-is/cjs/react-is.production.min.js
+/** @license React v16.13.1
+* react-is.production.min.js
+*
+* Copyright (c) Facebook, Inc. and its affiliates.
+*
+* This source code is licensed under the MIT license found in the
+* LICENSE file in the root directory of this source tree.
+*/
+var require_react_is_production_min = /* @__PURE__ */ __commonJSMin(((exports) => {
+	var b = "function" === typeof Symbol && Symbol.for, c = b ? Symbol.for("react.element") : 60103, d = b ? Symbol.for("react.portal") : 60106, e = b ? Symbol.for("react.fragment") : 60107, f = b ? Symbol.for("react.strict_mode") : 60108, g = b ? Symbol.for("react.profiler") : 60114, h = b ? Symbol.for("react.provider") : 60109, k = b ? Symbol.for("react.context") : 60110, l = b ? Symbol.for("react.async_mode") : 60111, m = b ? Symbol.for("react.concurrent_mode") : 60111, n = b ? Symbol.for("react.forward_ref") : 60112, p = b ? Symbol.for("react.suspense") : 60113, q = b ? Symbol.for("react.suspense_list") : 60120, r = b ? Symbol.for("react.memo") : 60115, t = b ? Symbol.for("react.lazy") : 60116, v = b ? Symbol.for("react.block") : 60121, w = b ? Symbol.for("react.fundamental") : 60117, x = b ? Symbol.for("react.responder") : 60118, y = b ? Symbol.for("react.scope") : 60119;
+	function z(a) {
+		if ("object" === typeof a && null !== a) {
+			var u = a.$$typeof;
+			switch (u) {
+				case c: switch (a = a.type, a) {
+					case l:
+					case m:
+					case e:
+					case g:
+					case f:
+					case p: return a;
+					default: switch (a = a && a.$$typeof, a) {
+						case k:
+						case n:
+						case t:
+						case r:
+						case h: return a;
+						default: return u;
+					}
+				}
+				case d: return u;
+			}
+		}
+	}
+	function A(a) {
+		return z(a) === m;
+	}
+	exports.AsyncMode = l;
+	exports.ConcurrentMode = m;
+	exports.ContextConsumer = k;
+	exports.ContextProvider = h;
+	exports.Element = c;
+	exports.ForwardRef = n;
+	exports.Fragment = e;
+	exports.Lazy = t;
+	exports.Memo = r;
+	exports.Portal = d;
+	exports.Profiler = g;
+	exports.StrictMode = f;
+	exports.Suspense = p;
+	exports.isAsyncMode = function(a) {
+		return A(a) || z(a) === l;
+	};
+	exports.isConcurrentMode = A;
+	exports.isContextConsumer = function(a) {
+		return z(a) === k;
+	};
+	exports.isContextProvider = function(a) {
+		return z(a) === h;
+	};
+	exports.isElement = function(a) {
+		return "object" === typeof a && null !== a && a.$$typeof === c;
+	};
+	exports.isForwardRef = function(a) {
+		return z(a) === n;
+	};
+	exports.isFragment = function(a) {
+		return z(a) === e;
+	};
+	exports.isLazy = function(a) {
+		return z(a) === t;
+	};
+	exports.isMemo = function(a) {
+		return z(a) === r;
+	};
+	exports.isPortal = function(a) {
+		return z(a) === d;
+	};
+	exports.isProfiler = function(a) {
+		return z(a) === g;
+	};
+	exports.isStrictMode = function(a) {
+		return z(a) === f;
+	};
+	exports.isSuspense = function(a) {
+		return z(a) === p;
+	};
+	exports.isValidElementType = function(a) {
+		return "string" === typeof a || "function" === typeof a || a === e || a === m || a === g || a === f || a === p || a === q || "object" === typeof a && null !== a && (a.$$typeof === t || a.$$typeof === r || a.$$typeof === h || a.$$typeof === k || a.$$typeof === n || a.$$typeof === w || a.$$typeof === x || a.$$typeof === y || a.$$typeof === v);
+	};
+	exports.typeOf = z;
+}));
+//#endregion
+//#region node_modules/hoist-non-react-statics/node_modules/react-is/index.js
+var require_react_is = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = require_react_is_production_min();
+}));
+//#endregion
+//#region node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js
+var require_hoist_non_react_statics_cjs = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var reactIs = require_react_is();
+	/**
+	* Copyright 2015, Yahoo! Inc.
+	* Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+	*/
+	var REACT_STATICS = {
+		childContextTypes: true,
+		contextType: true,
+		contextTypes: true,
+		defaultProps: true,
+		displayName: true,
+		getDefaultProps: true,
+		getDerivedStateFromError: true,
+		getDerivedStateFromProps: true,
+		mixins: true,
+		propTypes: true,
+		type: true
+	};
+	var KNOWN_STATICS = {
+		name: true,
+		length: true,
+		prototype: true,
+		caller: true,
+		callee: true,
+		arguments: true,
+		arity: true
+	};
+	var FORWARD_REF_STATICS = {
+		"$$typeof": true,
+		render: true,
+		defaultProps: true,
+		displayName: true,
+		propTypes: true
+	};
+	var MEMO_STATICS = {
+		"$$typeof": true,
+		compare: true,
+		defaultProps: true,
+		displayName: true,
+		propTypes: true,
+		type: true
+	};
+	var TYPE_STATICS = {};
+	TYPE_STATICS[reactIs.ForwardRef] = FORWARD_REF_STATICS;
+	TYPE_STATICS[reactIs.Memo] = MEMO_STATICS;
+	function getStatics(component) {
+		if (reactIs.isMemo(component)) return MEMO_STATICS;
+		return TYPE_STATICS[component["$$typeof"]] || REACT_STATICS;
+	}
+	var defineProperty = Object.defineProperty;
+	var getOwnPropertyNames = Object.getOwnPropertyNames;
+	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+	var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+	var getPrototypeOf = Object.getPrototypeOf;
+	var objectPrototype = Object.prototype;
+	function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
+		if (typeof sourceComponent !== "string") {
+			if (objectPrototype) {
+				var inheritedComponent = getPrototypeOf(sourceComponent);
+				if (inheritedComponent && inheritedComponent !== objectPrototype) hoistNonReactStatics(targetComponent, inheritedComponent, blacklist);
+			}
+			var keys = getOwnPropertyNames(sourceComponent);
+			if (getOwnPropertySymbols) keys = keys.concat(getOwnPropertySymbols(sourceComponent));
+			var targetStatics = getStatics(targetComponent);
+			var sourceStatics = getStatics(sourceComponent);
+			for (var i = 0; i < keys.length; ++i) {
+				var key = keys[i];
+				if (!KNOWN_STATICS[key] && !(blacklist && blacklist[key]) && !(sourceStatics && sourceStatics[key]) && !(targetStatics && targetStatics[key])) {
+					var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
+					try {
+						defineProperty(targetComponent, key, descriptor);
+					} catch (e) {}
+				}
+			}
+		}
+		return targetComponent;
+	}
+	module.exports = hoistNonReactStatics;
+}));
+//#endregion
 //#region node_modules/@emotion/utils/dist/emotion-utils.browser.esm.js
 var isBrowser = true;
 function getRegisteredStyles(registered, registeredStyles, classNames) {
@@ -12781,7 +12986,7 @@ var unitlessKeys = {
 };
 //#endregion
 //#region node_modules/@emotion/serialize/dist/emotion-serialize.esm.js
-var isDevelopment$1 = false;
+var isDevelopment$2 = false;
 var hyphenateRegex = /[A-Z]|^ms/g;
 var animationRegex = /_EMO_([^_]+?)_([^]*?)_EMO_/g;
 var isCustomProperty = function isCustomProperty(property) {
@@ -12863,7 +13068,7 @@ function createStringFromObject(mergedProps, registered, obj) {
 			if (registered != null && registered[asString] !== void 0) string += key + "{" + registered[asString] + "}";
 			else if (isProcessableValue(asString)) string += processStyleName(key) + ":" + processStyleValue(key, asString) + ";";
 		} else {
-			if (key === "NO_COMPONENT_SELECTOR" && isDevelopment$1) throw new Error(noComponentSelectorMessage);
+			if (key === "NO_COMPONENT_SELECTOR" && isDevelopment$2) throw new Error(noComponentSelectorMessage);
 			if (Array.isArray(value) && typeof value[0] === "string" && (registered == null || registered[value[0]] === void 0)) {
 				for (var _i = 0; _i < value.length; _i++) if (isProcessableValue(value[_i])) string += processStyleName(key) + ":" + processStyleValue(key, value[_i]) + ";";
 			} else {
@@ -12914,8 +13119,6 @@ var syncFallback = function syncFallback(create) {
 var useInsertionEffect = import_react.useInsertionEffect ? import_react.useInsertionEffect : false;
 var useInsertionEffectAlwaysWithSyncFallback = useInsertionEffect || syncFallback;
 useInsertionEffect || import_react.useLayoutEffect;
-//#endregion
-//#region node_modules/@emotion/react/dist/emotion-element-f0de968e.browser.esm.js
 var EmotionCacheContext = /* @__PURE__ */ import_react.createContext(typeof HTMLElement !== "undefined" ? /* @__PURE__ */ createCache({ key: "css" }) : null);
 EmotionCacheContext.Provider;
 var withEmotionCache = function withEmotionCache(func) {
@@ -12924,7 +13127,73 @@ var withEmotionCache = function withEmotionCache(func) {
 	});
 };
 var ThemeContext = /* @__PURE__ */ import_react.createContext({});
-({}).hasOwnProperty;
+var hasOwn = {}.hasOwnProperty;
+var typePropName = "__EMOTION_TYPE_PLEASE_DO_NOT_USE__";
+var createEmotionProps = function createEmotionProps(type, props) {
+	var newProps = {};
+	for (var _key in props) if (hasOwn.call(props, _key)) newProps[_key] = props[_key];
+	newProps[typePropName] = type;
+	return newProps;
+};
+var Insertion$1 = function Insertion(_ref) {
+	var cache = _ref.cache, serialized = _ref.serialized, isStringTag = _ref.isStringTag;
+	registerStyles(cache, serialized, isStringTag);
+	useInsertionEffectAlwaysWithSyncFallback(function() {
+		return insertStyles(cache, serialized, isStringTag);
+	});
+	return null;
+};
+var Emotion$1 = /* @__PURE__ */ withEmotionCache(function(props, cache, ref) {
+	var cssProp = props.css;
+	if (typeof cssProp === "string" && cache.registered[cssProp] !== void 0) cssProp = cache.registered[cssProp];
+	var WrappedComponent = props[typePropName];
+	var registeredStyles = [cssProp];
+	var className = "";
+	if (typeof props.className === "string") className = getRegisteredStyles(cache.registered, registeredStyles, props.className);
+	else if (props.className != null) className = props.className + " ";
+	var serialized = serializeStyles(registeredStyles, void 0, import_react.useContext(ThemeContext));
+	className += cache.key + "-" + serialized.name;
+	var newProps = {};
+	for (var _key2 in props) if (hasOwn.call(props, _key2) && _key2 !== "css" && _key2 !== typePropName && true) newProps[_key2] = props[_key2];
+	newProps.className = className;
+	if (ref) newProps.ref = ref;
+	return /* @__PURE__ */ import_react.createElement(import_react.Fragment, null, /* @__PURE__ */ import_react.createElement(Insertion$1, {
+		cache,
+		serialized,
+		isStringTag: typeof WrappedComponent === "string"
+	}), /* @__PURE__ */ import_react.createElement(WrappedComponent, newProps));
+});
+require_hoist_non_react_statics_cjs();
+var jsx = function jsx(type, props) {
+	var args = arguments;
+	if (props == null || !hasOwn.call(props, "css")) return import_react.createElement.apply(void 0, args);
+	var argsLength = args.length;
+	var createElementArgArray = new Array(argsLength);
+	createElementArgArray[0] = Emotion$1;
+	createElementArgArray[1] = createEmotionProps(type, props);
+	for (var i = 2; i < argsLength; i++) createElementArgArray[i] = args[i];
+	return import_react.createElement.apply(null, createElementArgArray);
+};
+(function(_jsx) {
+	var JSX;
+	(function(_JSX) {})(JSX || (JSX = _jsx.JSX || (_jsx.JSX = {})));
+})(jsx || (jsx = {}));
+function css() {
+	for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
+	return serializeStyles(args);
+}
+function keyframes() {
+	var insertable = css.apply(void 0, arguments);
+	var name = "animation-" + insertable.name;
+	return {
+		name,
+		styles: "@keyframes " + name + "{" + insertable.styles + "}",
+		anim: 1,
+		toString: function toString() {
+			return "_EMO_" + this.name + "_" + this.styles + "_EMO_";
+		}
+	};
+}
 //#endregion
 //#region node_modules/@emotion/is-prop-valid/dist/emotion-is-prop-valid.esm.js
 var reactPropsRegex = /^((children|dangerouslySetInnerHTML|key|ref|autoFocus|defaultValue|defaultChecked|innerHTML|suppressContentEditableWarning|suppressHydrationWarning|valueLink|abbr|accept|acceptCharset|accessKey|action|allow|allowUserMedia|allowPaymentRequest|allowFullScreen|allowTransparency|alt|async|autoComplete|autoPlay|capture|cellPadding|cellSpacing|challenge|charSet|checked|cite|classID|className|cols|colSpan|content|contentEditable|contextMenu|controls|controlsList|coords|crossOrigin|data|dateTime|decoding|default|defer|dir|disabled|disablePictureInPicture|disableRemotePlayback|download|draggable|encType|enterKeyHint|fetchpriority|fetchPriority|form|formAction|formEncType|formMethod|formNoValidate|formTarget|frameBorder|headers|height|hidden|high|href|hrefLang|htmlFor|httpEquiv|id|inputMode|integrity|is|keyParams|keyType|kind|label|lang|list|loading|loop|low|marginHeight|marginWidth|max|maxLength|media|mediaGroup|method|min|minLength|multiple|muted|name|nonce|noValidate|open|optimum|pattern|placeholder|playsInline|popover|popoverTarget|popoverTargetAction|poster|preload|profile|radioGroup|readOnly|referrerPolicy|rel|required|reversed|role|rows|rowSpan|sandbox|scope|scoped|scrolling|seamless|selected|shape|size|sizes|slot|span|spellCheck|src|srcDoc|srcLang|srcSet|start|step|style|summary|tabIndex|target|title|translate|type|useMap|value|width|wmode|wrap|about|datatype|inlist|prefix|property|resource|typeof|vocab|autoCapitalize|autoCorrect|autoSave|color|incremental|fallback|inert|itemProp|itemScope|itemType|itemID|itemRef|on|option|results|security|unselectable|accentHeight|accumulate|additive|alignmentBaseline|allowReorder|alphabetic|amplitude|arabicForm|ascent|attributeName|attributeType|autoReverse|azimuth|baseFrequency|baselineShift|baseProfile|bbox|begin|bias|by|calcMode|capHeight|clip|clipPathUnits|clipPath|clipRule|colorInterpolation|colorInterpolationFilters|colorProfile|colorRendering|contentScriptType|contentStyleType|cursor|cx|cy|d|decelerate|descent|diffuseConstant|direction|display|divisor|dominantBaseline|dur|dx|dy|edgeMode|elevation|enableBackground|end|exponent|externalResourcesRequired|fill|fillOpacity|fillRule|filter|filterRes|filterUnits|floodColor|floodOpacity|focusable|fontFamily|fontSize|fontSizeAdjust|fontStretch|fontStyle|fontVariant|fontWeight|format|from|fr|fx|fy|g1|g2|glyphName|glyphOrientationHorizontal|glyphOrientationVertical|glyphRef|gradientTransform|gradientUnits|hanging|horizAdvX|horizOriginX|ideographic|imageRendering|in|in2|intercept|k|k1|k2|k3|k4|kernelMatrix|kernelUnitLength|kerning|keyPoints|keySplines|keyTimes|lengthAdjust|letterSpacing|lightingColor|limitingConeAngle|local|markerEnd|markerMid|markerStart|markerHeight|markerUnits|markerWidth|mask|maskContentUnits|maskUnits|mathematical|mode|numOctaves|offset|opacity|operator|order|orient|orientation|origin|overflow|overlinePosition|overlineThickness|panose1|paintOrder|pathLength|patternContentUnits|patternTransform|patternUnits|pointerEvents|points|pointsAtX|pointsAtY|pointsAtZ|preserveAlpha|preserveAspectRatio|primitiveUnits|r|radius|refX|refY|renderingIntent|repeatCount|repeatDur|requiredExtensions|requiredFeatures|restart|result|rotate|rx|ry|scale|seed|shapeRendering|slope|spacing|specularConstant|specularExponent|speed|spreadMethod|startOffset|stdDeviation|stemh|stemv|stitchTiles|stopColor|stopOpacity|strikethroughPosition|strikethroughThickness|string|stroke|strokeDasharray|strokeDashoffset|strokeLinecap|strokeLinejoin|strokeMiterlimit|strokeOpacity|strokeWidth|surfaceScale|systemLanguage|tableValues|targetX|targetY|textAnchor|textDecoration|textRendering|textLength|to|transform|u1|u2|underlinePosition|underlineThickness|unicode|unicodeBidi|unicodeRange|unitsPerEm|vAlphabetic|vHanging|vIdeographic|vMathematical|values|vectorEffect|version|vertAdvY|vertOriginX|vertOriginY|viewBox|viewTarget|visibility|widths|wordSpacing|writingMode|x|xHeight|x1|x2|xChannelSelector|xlinkActuate|xlinkArcrole|xlinkHref|xlinkRole|xlinkShow|xlinkTitle|xlinkType|xmlBase|xmlns|xmlnsXlink|xmlLang|xmlSpace|y|y1|y2|yChannelSelector|z|zoomAndPan|for|class|autofocus)|(([Dd][Aa][Tt][Aa]|[Aa][Rr][Ii][Aa]|x)-.*))$/;
@@ -13182,12 +13451,6 @@ var Flex = styled.div`
   ${(props) => props.gap ? `flex-shrink: ${props.flexShrink};` : ""}
 `;
 //#endregion
-//#region src/components/Common/Label.tsx
-var Label = styled.label`
-  font-size: 12px;
-  font-weight: 500;
-`;
-//#endregion
 //#region src/components/Common/InputErrorMessage.tsx
 var InputErrorMessage = styled.p`
   color: var(--color-error);
@@ -13195,6 +13458,12 @@ var InputErrorMessage = styled.p`
   line-height: 14px;
   height: 14px;
   margin: 0;
+`;
+//#endregion
+//#region src/components/Common/Label.tsx
+var Label = styled.label`
+  font-size: 12px;
+  font-weight: 500;
 `;
 //#endregion
 //#region node_modules/react/cjs/react-jsx-runtime.production.js
@@ -13208,7 +13477,7 @@ var InputErrorMessage = styled.p`
 * LICENSE file in the root directory of this source tree.
 */
 var require_react_jsx_runtime_production = /* @__PURE__ */ __commonJSMin(((exports) => {
-	var REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element");
+	var REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
 	function jsxProd(type, config, maybeKey) {
 		var key = null;
 		void 0 !== maybeKey && (key = "" + maybeKey);
@@ -13226,6 +13495,7 @@ var require_react_jsx_runtime_production = /* @__PURE__ */ __commonJSMin(((expor
 			props: maybeKey
 		};
 	}
+	exports.Fragment = REACT_FRAGMENT_TYPE;
 	exports.jsx = jsxProd;
 	exports.jsxs = jsxProd;
 }));
@@ -13317,6 +13587,16 @@ var DEFAULT_SEGMENT_LENGTHS = [
 	4,
 	4
 ];
+var ISSUER_CODE_MAP = {
+	BC카드: "31",
+	신한카드: "41",
+	카카오뱅크: "15",
+	현대카드: "61",
+	우리카드: "W1",
+	롯데카드: "71",
+	하나카드: "21",
+	국민카드: "11"
+};
 //#endregion
 //#region src/utils/validators.ts
 function validateNumberString(input) {
@@ -13431,19 +13711,78 @@ var CardCVCInput = (0, import_react.forwardRef)(function CardCVCInput(props, ref
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Flex, {
 		direction: "column",
 		gap: 10,
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: "CVC" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ValidationInput, {
-			ref,
-			value: props.value,
-			onChange: handleCVC,
-			type: "text",
-			inputMode: "numeric",
-			autoComplete: "cc-exp-csc",
-			placeholder: "CVC",
-			isShowError: true,
-			validations: cvcValidations
-		})]
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: "CVC" }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ValidationInput, {
+				ref,
+				value: props.value,
+				onChange: handleCVC,
+				type: "text",
+				inputMode: "numeric",
+				autoComplete: "cc-exp-csc",
+				placeholder: "CVC",
+				isShowError: false,
+				validations: cvcValidations
+			}),
+			props.errorMessage && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(InputErrorMessage, { children: props.errorMessage })
+		]
 	});
 });
+//#endregion
+//#region src/utils/getCardBrand.ts
+function couldBeValidBrand(input) {
+	if (!input) return true;
+	if (input.startsWith("4")) return true;
+	if (input.startsWith("5")) {
+		if (input.length === 1) return true;
+		return input[1] >= "1" && input[1] <= "5";
+	}
+	if (input.startsWith("3")) {
+		if (input.length === 1) return true;
+		return input[1] === "4" || input[1] === "6" || input[1] === "7";
+	}
+	if (input.startsWith("6")) {
+		if (input.length === 1) return true;
+		if (!input.startsWith("62")) return false;
+		if (input.length === 2) return true;
+		const third = input[2];
+		if (third >= "4" && third <= "6") return true;
+		if (third === "8") {
+			if (input.length === 3) return true;
+			return input[3] >= "2" && input[3] <= "8";
+		}
+		if (third === "2") {
+			if (input.length === 3) return true;
+			const p4 = Number(input.slice(0, 4));
+			if (input.length === 4) return p4 >= 6221 && p4 <= 6229;
+			const p5 = Number(input.slice(0, 5));
+			if (input.length === 5) return p5 >= 62212 && p5 <= 62292;
+			return Number(input.slice(0, 6)) >= 622126 && Number(input.slice(0, 6)) <= 622925;
+		}
+		return false;
+	}
+	return false;
+}
+function getCardBrand(segments) {
+	const fullNumber = segments.join("");
+	if (!fullNumber) return void 0;
+	if (fullNumber.startsWith("36")) return "Diners";
+	if (fullNumber.startsWith("34") || fullNumber.startsWith("37")) return "AMEX";
+	if (fullNumber.length >= 6) {
+		const prefix6 = Number(fullNumber.slice(0, 6));
+		if (prefix6 >= 622126 && prefix6 <= 622925) return "UnionPay";
+	}
+	if (fullNumber.length >= 4) {
+		const prefix4 = Number(fullNumber.slice(0, 4));
+		if (prefix4 >= 6282 && prefix4 <= 6288) return "UnionPay";
+	}
+	if (fullNumber.length >= 3) {
+		const prefix3 = Number(fullNumber.slice(0, 3));
+		if (prefix3 >= 624 && prefix3 <= 626) return "UnionPay";
+	}
+	if (fullNumber.startsWith("4")) return "VISA";
+	if (/^5[1-5]/.test(fullNumber)) return "MasterCard";
+}
 //#endregion
 //#region src/components/CardRegister/CardNumberSegmentsInput.tsx
 function CardNumberSegmentsInput(props) {
@@ -13467,20 +13806,27 @@ function CardNumberSegmentsInput(props) {
 		props.onChange(newSegments);
 		if (event.target.value.length === segmentLengths[inputIndex]) segmentInputRefs.current[inputIndex + 1]?.focus();
 	};
-	if (!props.brand && props.value.length === 1) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Flex, {
-		direction: "column",
-		gap: 10,
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: "카드 번호" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ValidationInput, {
-			type: "text",
-			inputMode: "numeric",
-			placeholder: "카드 번호를 입력해 주세요",
-			value: props.value[0],
-			maxLength: 4,
-			onChange: handleSingleChange,
-			isShowError: true,
-			validations: numericOnlyValidations
-		})]
-	});
+	if (!props.brand && props.value.length === 1) {
+		const showBrandError = props.value[0].length === 4;
+		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Flex, {
+			direction: "column",
+			gap: 10,
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: "카드 번호" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ValidationInput, {
+					type: "text",
+					inputMode: "numeric",
+					placeholder: "카드 번호를 입력해 주세요",
+					value: props.value[0],
+					maxLength: 4,
+					onChange: handleSingleChange,
+					isShowError: false,
+					validations: numericOnlyValidations
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(InputErrorMessage, { children: props.errorMessage ?? (showBrandError ? "유효하지 않은 카드 번호입니다." : void 0) })
+			]
+		});
+	}
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Flex, {
 		direction: "column",
 		gap: 10,
@@ -13497,7 +13843,11 @@ function CardNumberSegmentsInput(props) {
 				value: props.value[index] ?? "",
 				onChange: handleSegmentChange,
 				isShowError: true,
-				validations: numberSegmentValidations(maxLength),
+				validations: index === 0 ? [...numberSegmentValidations(maxLength), {
+					type: "validateOnChange",
+					validator: couldBeValidBrand,
+					message: "유효하지 않은 카드 번호입니다."
+				}] : numberSegmentValidations(maxLength),
 				autoFocus: index === 0 && props.value[0].length < segmentLengths[0]
 			}, index))
 		})]
@@ -13519,30 +13869,34 @@ var CardExpiryDateInput = (0, import_react.forwardRef)(function CardExpiryDateIn
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Flex, {
 		direction: "column",
 		gap: 10,
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: "유효기간" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Flex, {
-			gap: 10,
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ValidationInput, {
-				ref,
-				type: "text",
-				inputMode: "numeric",
-				autoComplete: "cc-exp-month",
-				placeholder: "MM",
-				value: props.value.expiryMonth,
-				onChange: handleChangeMonth,
-				isShowError: true,
-				validations: expiryDateValidations("month")
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ValidationInput, {
-				ref: yearRef,
-				type: "text",
-				inputMode: "numeric",
-				autoComplete: "cc-exp-year",
-				placeholder: "YY",
-				value: props.value.expiryYear,
-				onChange: handleChangeYear,
-				isShowError: true,
-				validations: expiryDateValidations("year")
-			})]
-		})]
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: "유효기간" }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Flex, {
+				gap: 10,
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ValidationInput, {
+					ref,
+					type: "text",
+					inputMode: "numeric",
+					autoComplete: "cc-exp-month",
+					placeholder: "MM",
+					value: props.value.expiryMonth,
+					onChange: handleChangeMonth,
+					isShowError: true,
+					validations: expiryDateValidations("month")
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ValidationInput, {
+					ref: yearRef,
+					type: "text",
+					inputMode: "numeric",
+					autoComplete: "cc-exp-year",
+					placeholder: "YY",
+					value: props.value.expiryYear,
+					onChange: handleChangeYear,
+					isShowError: true,
+					validations: expiryDateValidations("year")
+				})]
+			}),
+			props.errorMessage && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(InputErrorMessage, { children: props.errorMessage })
+		]
 	});
 });
 //#endregion
@@ -13653,12 +14007,12 @@ var CardPasswordInput = (0, import_react.forwardRef)(function CardPasswordInput(
 });
 //#endregion
 //#region src/components/CardRegister/CardForm.tsx
-var Title = styled.h3`
+var Title$1 = styled.h3`
   font-size: 18px;
   font-weight: 700;
   margin: 0;
 `;
-var Description = styled.h3`
+var Description$1 = styled.h3`
   font-size: 10px;
   color: var(--color-description);
   margin: 0;
@@ -13673,12 +14027,13 @@ var FormSection = (0, import_react.forwardRef)(function FormSection({ isVisible,
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Flex, {
 				direction: "column",
 				gap: 5,
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Title, { children: title }), description && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Description, { children: description })]
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Title$1, { children: title }), description && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Description$1, { children: description })]
 			}), children]
 		})
 	});
 });
 function CardForm(props) {
+	const { serverErrors = {} } = props;
 	const isCardNumberComplete = (props.brand ? CARD_BRAND_CONFIGS[props.brand].segmentLengths : DEFAULT_SEGMENT_LENGTHS).every((len, i) => props.formState.cardNumberSegments[i]?.length === len);
 	const isCardCompanySelected = !!props.formState.cardCompany;
 	const isExpiryComplete = validateMonth(props.formState.expiryMonth) && validateYear(props.formState.expiryYear);
@@ -13739,7 +14094,8 @@ function CardForm(props) {
 					onChange: (value) => props.setFormState({
 						...props.formState,
 						cvc: value
-					})
+					}),
+					errorMessage: serverErrors.cvc
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormSection, {
@@ -13757,7 +14113,8 @@ function CardForm(props) {
 						...props.formState,
 						expiryMonth: value[0],
 						expiryYear: value[1]
-					})
+					}),
+					errorMessage: serverErrors.expirationDate
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormSection, {
@@ -13779,14 +14136,15 @@ function CardForm(props) {
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Flex, {
 					direction: "column",
 					gap: 5,
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Title, { children: "결제할 카드 번호를 입력해 주세요" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Description, { children: "본인 명의의 카드만 결제 가능합니다." })]
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Title$1, { children: "결제할 카드 번호를 입력해 주세요" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Description$1, { children: "본인 명의의 카드만 결제 가능합니다." })]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardNumberSegmentsInput, {
 					value: props.formState.cardNumberSegments,
 					brand: props.brand,
 					onChange: (value) => props.setFormState({
 						...props.formState,
 						cardNumberSegments: value
-					})
+					}),
+					errorMessage: serverErrors.cardNumber
 				})]
 			})
 		]
@@ -13816,7 +14174,7 @@ var CardText = styled.span`
   font-weight: 500;
   letter-spacing: 8%;
 `;
-var CardCompanyName = {
+var CardCompanyName$1 = {
 	BC카드: "#F04651",
 	신한카드: "#0046FF",
 	카카오뱅크: "#FFE600",
@@ -13830,7 +14188,7 @@ function CardPreview(props) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContainer, {
 		justifyContent: "center",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-			$backgroundColor: CardCompanyName[props.cardCompany],
+			$backgroundColor: CardCompanyName$1[props.cardCompany],
 			direction: "column",
 			gap: 14,
 			children: [
@@ -13853,6 +14211,10 @@ function CardPreview(props) {
 }
 //#endregion
 //#region src/components/CardRegisterComplete/SubmitButton.tsx
+var spin$1 = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+`;
 var Button = styled.button`
   background: #333333;
   width: 100%;
@@ -13870,29 +14232,85 @@ var Button = styled.button`
   line-height: 12px;
   letter-spacing: 0%;
   color: #f3f3f3;
+  cursor: ${({ disabled }) => disabled ? "not-allowed" : "pointer"};
 `;
-function SubmitButton(props) {
-	const navigate = useNavigate();
-	const handleClick = () => {
-		navigate("/react-payments/success");
-	};
-	if (!props.isCardFormComplete) return null;
+var ButtonSpinner = styled.div`
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #f3f3f3;
+  border-radius: 50%;
+  animation: ${spin$1} 0.8s linear infinite;
+  margin: 0 auto;
+`;
+function SubmitButton({ isCardFormComplete, isSubmitting, onSubmit }) {
+	if (!isCardFormComplete) return null;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-		onClick: handleClick,
-		children: "확인"
+		onClick: onSubmit,
+		disabled: isSubmitting,
+		children: isSubmitting ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ButtonSpinner, {}) : "확인"
 	});
 }
 //#endregion
 //#region src/pages/CardRegisterPage.tsx
-var View = styled.div`
+var View$1 = styled.div`
   width: 100%;
   max-width: 376px;
   margin: 0 auto;
   padding: 16px 32px;
 `;
 function CardRegisterPage(props) {
-	const { cardFormState, brand, handleSetFormState } = props;
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(View, { children: [
+	const { cardFormState, brand, handleSetFormState, resetFormState } = props;
+	(0, import_react.useEffect)(() => {
+		resetFormState();
+	}, []);
+	const navigate = useNavigate();
+	const [isSubmitting, setIsSubmitting] = (0, import_react.useState)(false);
+	const [serverErrors, setServerErrors] = (0, import_react.useState)({});
+	const CODE_TO_FIELD = {
+		INVALID_CARD_NUMBER: "cardNumber",
+		INVALID_CVC: "cvc",
+		INVALID_EXPIRATION_DATE: "expirationDate"
+	};
+	const handleFormStateChange = (newState) => {
+		if (newState.cardNumberSegments !== cardFormState.cardNumberSegments) setServerErrors({});
+		else if (newState.expiryMonth !== cardFormState.expiryMonth || newState.expiryYear !== cardFormState.expiryYear) setServerErrors((prev) => ({
+			...prev,
+			expirationDate: void 0,
+			cvc: void 0
+		}));
+		else if (newState.cvc !== cardFormState.cvc) setServerErrors((prev) => ({
+			...prev,
+			cvc: void 0
+		}));
+		handleSetFormState(newState);
+	};
+	const handleSubmit = async () => {
+		setIsSubmitting(true);
+		setServerErrors({});
+		const issuerCode = ISSUER_CODE_MAP[cardFormState.cardCompany];
+		try {
+			const res = await fetch(`/react-payments/cards`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					number: cardFormState.cardNumberSegments.join(""),
+					expirationDate: `${cardFormState.expiryMonth}/${cardFormState.expiryYear}`,
+					cvc: cardFormState.cvc,
+					issuerCode
+				})
+			});
+			if (res.ok) navigate("/cards");
+			else if (res.status === 400) {
+				const { code, message } = await res.json();
+				const field = CODE_TO_FIELD[code];
+				if (field) setServerErrors({ [field]: message });
+			} else alert("카드 등록에 실패했습니다.");
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(View$1, { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardPreview, {
 			cardBrand: brand,
 			cardNumberSegments: cardFormState.cardNumberSegments,
@@ -13902,10 +14320,15 @@ function CardRegisterPage(props) {
 		}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardForm, {
 			formState: cardFormState,
-			setFormState: handleSetFormState,
-			brand
+			setFormState: handleFormStateChange,
+			brand,
+			serverErrors
 		}),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SubmitButton, { isCardFormComplete: isCardFormComplete(cardFormState, brand) })
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SubmitButton, {
+			isCardFormComplete: isCardFormComplete(cardFormState, brand),
+			isSubmitting,
+			onSubmit: handleSubmit
+		})
 	] });
 }
 //#endregion
@@ -13951,7 +14374,7 @@ var Wrapper = styled.div`
 function SubmitSuccess(props) {
 	const navigate = useNavigate();
 	const handleClick = () => {
-		navigate("/react-payments/");
+		navigate("/cards");
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Wrapper, { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckImage, { src: `/react-payments/check.png` }),
@@ -13977,26 +14400,322 @@ function CardRegisterCompletePage(props) {
 	});
 }
 //#endregion
-//#region src/utils/getCardBrand.ts
-function getCardBrand(segments) {
-	const fullNumber = segments.join("");
-	if (!fullNumber) return void 0;
-	if (fullNumber.startsWith("36")) return "Diners";
-	if (fullNumber.startsWith("34") || fullNumber.startsWith("37")) return "AMEX";
-	if (fullNumber.length >= 6) {
-		const prefix6 = Number(fullNumber.slice(0, 6));
-		if (prefix6 >= 622126 && prefix6 <= 622925) return "UnionPay";
+//#region src/components/CardList/EmptyCardList.tsx
+var CardPlaceholder = styled.div`
+  width: 160px;
+  height: 100px;
+  border: 1px dashed #d9d9d9;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+`;
+var Title = styled.span`
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-black);
+`;
+var Description = styled.span`
+  font-size: 12px;
+  color: var(--color-description);
+`;
+var AddButton = styled.button`
+  margin-top: 14px;
+  width: 100%;
+  padding: 15px;
+  background-color: #333333;
+  color: var(--color-white);
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: Noto Sans KR;
+  font-style: Bold;
+  font-size: 15px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+`;
+function EmptyCardList() {
+	const navigate = useNavigate();
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flex, {
+		direction: "column",
+		gap: 24,
+		style: {
+			height: "100%",
+			color: "#F5F5F5"
+		},
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Flex, {
+			direction: "column",
+			gap: 16,
+			justifyContent: "center",
+			style: {
+				flex: 1,
+				alignItems: "center",
+				color: "#F5F5F5"
+			},
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardPlaceholder, {}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Flex, {
+					direction: "column",
+					gap: 8,
+					style: { alignItems: "center" },
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Title, { children: "등록된 카드가 없습니다" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Description, { children: "아래 버튼을 눌러 첫 카드를 등록해보세요" })]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AddButton, {
+					onClick: () => navigate("/cards/register"),
+					children: "카드 추가하기"
+				})
+			]
+		})
+	});
+}
+//#endregion
+//#region src/components/Common/Spinner.tsx
+var spin = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+`;
+var Circle = styled.div`
+  margin-top: 333px;
+  width: 30px;
+  height: 30px;
+  border: 4px solid #e0e0e0;
+  border-top-color: #333333;
+  border-radius: 50%;
+  animation: ${spin} 0.8s linear infinite;
+`;
+var Text = styled.span`
+  font-size: 14px;
+  color: var(--color-description);
+`;
+function Spinner() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Flex, {
+		direction: "column",
+		gap: 12,
+		justifyContent: "center",
+		style: { alignItems: "center" },
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Circle, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Text, { children: "로딩중" })]
+	});
+}
+//#endregion
+//#region src/pages/CardDashboardPage.tsx
+var ISSUER_INFO = {
+	"31": {
+		name: "BC카드",
+		color: "#E14F4F"
+	},
+	"41": {
+		name: "신한카드",
+		color: "#2563EB"
+	},
+	"15": {
+		name: "카카오뱅크",
+		color: "#F7E600"
+	},
+	"61": {
+		name: "현대카드",
+		color: "#333333"
+	},
+	W1: {
+		name: "우리카드",
+		color: "#59C2B0"
+	},
+	"71": {
+		name: "롯데카드",
+		color: "#E8453C"
+	},
+	"21": {
+		name: "하나카드",
+		color: "#3AB277"
+	},
+	"11": {
+		name: "국민카드",
+		color: "#9B59B6"
 	}
-	if (fullNumber.length >= 4) {
-		const prefix4 = Number(fullNumber.slice(0, 4));
-		if (prefix4 >= 6282 && prefix4 <= 6288) return "UnionPay";
-	}
-	if (fullNumber.length >= 3) {
-		const prefix3 = Number(fullNumber.slice(0, 3));
-		if (prefix3 >= 624 && prefix3 <= 626) return "UnionPay";
-	}
-	if (fullNumber.startsWith("4")) return "VISA";
-	if (/^5[1-5]/.test(fullNumber)) return "MasterCard";
+};
+function formatCardNumber(masked) {
+	return `${masked.slice(0, 4)} **** **** ${masked.slice(-4)}`;
+}
+var View = styled.div`
+  width: 100%;
+  max-width: 376px;
+  height: 100dvh;
+  margin: 0 auto;
+  padding: 16px 32px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+var PageTitle = styled.h1`
+  margin-top: 30px;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  font-family: Noto Sans KR;
+  line-height: 100%;
+`;
+var CardList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  overflow-y: auto;
+`;
+var CardItem = styled.li`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #e6e6e6;
+  border-radius: 5px;
+`;
+var CardThumbnail = styled.div`
+  width: 80px;
+  height: 50px;
+  border-radius: 5px;
+  background-color: ${({ color }) => color};
+  flex-shrink: 0;
+`;
+var CardInfo = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+var CardCompanyName = styled.span`
+  font-size: 14px;
+  font-weight: 700;
+`;
+var CardNumber = styled.span`
+  font-size: 13px;
+  color: #8c8c8c;
+`;
+var CardExpiry = styled.span`
+  font-size: 12px;
+  color: #8c8c8c;
+`;
+var DeleteButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #8c8c8c;
+  padding: 4px;
+  line-height: 1;
+  flex-shrink: 0;
+  &:hover {
+    color: #333;
+  }
+`;
+var ErrorWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+`;
+var ErrorIcon = styled.div`
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #333;
+  color: #fff;
+  font-size: 30px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+var ErrorTitle = styled.p`
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+`;
+var ErrorDescription = styled.p`
+  font-size: 12px;
+  color: #8c8c8c;
+  margin: 0;
+`;
+var RetryButton = styled.button`
+  margin-top: 8px;
+  width: 100%;
+  height: 52px;
+  background: #333;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+var AddCardButton = styled.button`
+  width: 100%;
+  height: 40px;
+  background-color: transparent;
+  border: 1px dashed #d9d9d9;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #8c8c8c;
+  cursor: pointer;
+`;
+function CardDashboardPage() {
+	const navigate = useNavigate();
+	const [cards, setCards] = (0, import_react.useState)(void 0);
+	const [fetchKey, setFetchKey] = (0, import_react.useState)(0);
+	(0, import_react.useEffect)(() => {
+		fetch(`/react-payments/cards`).then((res) => {
+			if (!res.ok) throw new Error();
+			return res.json();
+		}).then((data) => setCards(data)).catch(() => setCards(null));
+	}, [fetchKey]);
+	const handleRetry = () => {
+		navigate("/cards");
+		setCards(void 0);
+		setFetchKey((k) => k + 1);
+	};
+	const handleDelete = async (id) => {
+		if (!window.confirm("카드를 삭제하시겠습니까?")) return;
+		await fetch(`/react-payments/cards/${id}`, { method: "DELETE" });
+		setCards((prev) => (prev ?? []).filter((card) => card.id !== id));
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(View, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(PageTitle, { children: [
+		"보유 카드 (",
+		cards?.length ?? 0,
+		")"
+	] }), cards === void 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Spinner, {}) : cards === null ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(ErrorWrapper, { children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ErrorIcon, { children: "!" }),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ErrorTitle, { children: "카드 목록을 불러올 수 없습니다." }),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ErrorDescription, { children: "잠시 후 다시 시도해 주세요." }),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RetryButton, {
+			onClick: handleRetry,
+			children: "다시 시도"
+		})
+	] }) : cards.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmptyCardList, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardList, { children: [cards.map((card) => {
+		const info = ISSUER_INFO[card.issuerCode];
+		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardItem, { children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardThumbnail, { color: info.color }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardInfo, { children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardCompanyName, { children: info.name }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardNumber, { children: formatCardNumber(card.number) }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardExpiry, { children: ["유효기간 ", card.expirationDate] })
+			] }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DeleteButton, {
+				onClick: () => handleDelete(card.id),
+				children: "✕"
+			})
+		] }, card.id);
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AddCardButton, {
+		onClick: () => navigate("/cards/register"),
+		children: "+ 카드 추가"
+	})] }) })] });
 }
 //#endregion
 //#region src/hooks/useCardNumberSegments.ts
@@ -14022,7 +14741,11 @@ function useCardNumberSegments() {
 			setSegments([fullNumber]);
 			return;
 		}
-		setSegments(splitIntoSegments(fullNumber, brand ? CARD_BRAND_CONFIGS[brand].segmentLengths : DEFAULT_SEGMENT_LENGTHS));
+		if (!brand) {
+			setSegments([fullNumber]);
+			return;
+		}
+		setSegments(splitIntoSegments(fullNumber, CARD_BRAND_CONFIGS[brand].segmentLengths));
 	};
 	return {
 		segments,
@@ -14055,29 +14778,58 @@ function useCardForm() {
 			cardPassword: newState.cardPassword
 		});
 	};
+	const resetFormState = () => {
+		handleCardNumberChange([""]);
+		setFormState({
+			cardCompany: "",
+			expiryMonth: "",
+			expiryYear: "",
+			cvc: "",
+			cardPassword: ""
+		});
+	};
 	return {
 		cardFormState,
 		brand,
-		handleSetFormState
+		handleSetFormState,
+		resetFormState
 	};
 }
 //#endregion
 //#region src/App.tsx
 function App() {
-	const { cardFormState, brand, handleSetFormState } = useCardForm();
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Routes, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-		path: "/react-payments",
-		element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardRegisterPage, {
-			cardFormState,
-			brand,
-			handleSetFormState
+	const { cardFormState, brand, handleSetFormState, resetFormState } = useCardForm();
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Routes, { children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+			path: "/",
+			element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigate, { to: "/cards" })
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+			path: "/cards",
+			element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDashboardPage, {})
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+			path: "/cards/register",
+			element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardRegisterPage, {
+				cardFormState,
+				brand,
+				handleSetFormState,
+				resetFormState
+			})
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+			path: "/cards/register/success",
+			element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardRegisterCompletePage, { cardFormState })
 		})
-	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-		path: "/react-payments/success",
-		element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardRegisterCompletePage, { cardFormState })
-	})] });
+	] });
 }
 //#endregion
 //#region src/main.tsx
-(0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(App, {}) }) }));
+async function enableMocking() {}
+enableMocking().then(() => {
+	(0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
+		basename: "/react-payments",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(App, {}) })
+	}));
+});
 //#endregion
