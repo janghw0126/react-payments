@@ -20160,6 +20160,11 @@ function isValidBin(number) {
 function maskNumber(number) {
 	return number.slice(0, 6) + "******" + number.slice(-4);
 }
+function isValidCardRequestBody(body) {
+	if (typeof body !== "object" || body === null) return false;
+	const b = body;
+	return typeof b.number === "string" && typeof b.expirationDate === "string" && typeof b.cvc === "string" && typeof b.issuerCode === "string";
+}
 function isValidExpirationDate(expirationDate) {
 	if (!/^\d{2}\/\d{2}$/.test(expirationDate)) return false;
 	const month = parseInt(expirationDate.slice(0, 2));
@@ -20180,6 +20185,10 @@ var worker = setupWorker(...[
 	}),
 	http.post("/react-payments/cards", async ({ request }) => {
 		const body = await request.json();
+		if (!isValidCardRequestBody(body)) return HttpResponse.json({
+			code: "BAD_REQUEST",
+			message: "필수 필드가 누락되었습니다."
+		}, { status: 400 });
 		if (!isValidBin(body.number)) return HttpResponse.json({
 			code: "INVALID_CARD_NUMBER",
 			message: "유효하지 않은 카드 번호입니다."

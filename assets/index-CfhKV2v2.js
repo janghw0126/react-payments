@@ -13728,6 +13728,32 @@ var CardCVCInput = (0, import_react.forwardRef)(function CardCVCInput(props, ref
 	});
 });
 //#endregion
+//#region src/components/CardRegister/CardNumberSingleInput.tsx
+function CardNumberSingleInput({ value, onChange, errorMessage }) {
+	const handleChange = (event) => {
+		onChange(event.target.value);
+	};
+	const showBrandError = value.length === 4;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Flex, {
+		direction: "column",
+		gap: 10,
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: "카드 번호" }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ValidationInput, {
+				type: "text",
+				inputMode: "numeric",
+				placeholder: "카드 번호를 입력해 주세요",
+				value,
+				maxLength: 4,
+				onChange: handleChange,
+				isShowError: false,
+				validations: numericOnlyValidations
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(InputErrorMessage, { children: errorMessage ?? (showBrandError ? "유효하지 않은 카드 번호입니다." : void 0) })
+		]
+	});
+}
+//#endregion
 //#region src/utils/getCardBrand.ts
 function couldBeValidBrand(input) {
 	if (!input) return true;
@@ -13784,72 +13810,47 @@ function getCardBrand(segments) {
 }
 //#endregion
 //#region src/components/CardRegister/CardNumberSegmentsInput.tsx
-function CardNumberSegmentsInput(props) {
+function CardNumberSegmentsInput({ value, brand, onChange, errorMessage }) {
 	const segmentInputRefs = (0, import_react.useRef)([]);
-	const prevSegmentCountRef = (0, import_react.useRef)(props.value.length);
-	const segmentLengths = props.brand ? CARD_BRAND_CONFIGS[props.brand].segmentLengths : DEFAULT_SEGMENT_LENGTHS;
+	const segmentLengths = CARD_BRAND_CONFIGS[brand].segmentLengths;
 	(0, import_react.useEffect)(() => {
-		if (prevSegmentCountRef.current === 1 && props.value.length > 1) {
-			const isFirstSegmentComplete = props.value[0].length === segmentLengths[0];
-			segmentInputRefs.current[isFirstSegmentComplete ? 1 : 0]?.focus();
-		}
-		prevSegmentCountRef.current = props.value.length;
-	}, [props.value, segmentLengths]);
-	const handleSingleChange = (event) => {
-		props.onChange([event.target.value]);
-	};
+		const isFirstComplete = value[0]?.length === segmentLengths[0];
+		segmentInputRefs.current[isFirstComplete ? 1 : 0]?.focus();
+	}, []);
 	const handleSegmentChange = (event) => {
 		const inputIndex = Number(event.target.dataset.index);
-		const newSegments = [...props.value];
+		const newSegments = [...value];
 		newSegments[inputIndex] = event.target.value;
-		props.onChange(newSegments);
+		onChange(newSegments);
 		if (event.target.value.length === segmentLengths[inputIndex]) segmentInputRefs.current[inputIndex + 1]?.focus();
 	};
-	if (!props.brand && props.value.length === 1) {
-		const showBrandError = props.value[0].length === 4;
-		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Flex, {
-			direction: "column",
-			gap: 10,
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: "카드 번호" }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ValidationInput, {
-					type: "text",
-					inputMode: "numeric",
-					placeholder: "카드 번호를 입력해 주세요",
-					value: props.value[0],
-					maxLength: 4,
-					onChange: handleSingleChange,
-					isShowError: false,
-					validations: numericOnlyValidations
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(InputErrorMessage, { children: props.errorMessage ?? (showBrandError ? "유효하지 않은 카드 번호입니다." : void 0) })
-			]
-		});
-	}
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Flex, {
 		direction: "column",
 		gap: 10,
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: "카드 번호" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flex, {
-			gap: 10,
-			children: segmentLengths.map((maxLength, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ValidationInput, {
-				ref: (el) => {
-					segmentInputRefs.current[index] = el;
-				},
-				"data-index": index,
-				type: "text",
-				inputMode: "numeric",
-				placeholder: "1".repeat(maxLength),
-				value: props.value[index] ?? "",
-				onChange: handleSegmentChange,
-				isShowError: true,
-				validations: index === 0 ? [...numberSegmentValidations(maxLength), {
-					type: "validateOnChange",
-					validator: couldBeValidBrand,
-					message: "유효하지 않은 카드 번호입니다."
-				}] : numberSegmentValidations(maxLength),
-				autoFocus: index === 0 && props.value[0].length < segmentLengths[0]
-			}, index))
-		})]
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: "카드 번호" }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flex, {
+				gap: 10,
+				children: segmentLengths.map((maxLength, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ValidationInput, {
+					ref: (el) => {
+						segmentInputRefs.current[index] = el;
+					},
+					"data-index": index,
+					type: "text",
+					inputMode: "numeric",
+					placeholder: "1".repeat(maxLength),
+					value: value[index] ?? "",
+					onChange: handleSegmentChange,
+					isShowError: true,
+					validations: index === 0 ? [...numberSegmentValidations(maxLength), {
+						type: "validateOnChange",
+						validator: couldBeValidBrand,
+						message: "유효하지 않은 카드 번호입니다."
+					}] : numberSegmentValidations(maxLength)
+				}, index))
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(InputErrorMessage, { children: errorMessage })
+		]
 	});
 }
 //#endregion
@@ -14136,7 +14137,14 @@ function CardForm(props) {
 					direction: "column",
 					gap: 5,
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Title$1, { children: "결제할 카드 번호를 입력해 주세요" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Description$1, { children: "본인 명의의 카드만 결제 가능합니다." })]
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardNumberSegmentsInput, {
+				}), !props.brand && props.formState.cardNumberSegments.length === 1 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardNumberSingleInput, {
+					value: props.formState.cardNumberSegments[0],
+					onChange: (value) => props.setFormState({
+						...props.formState,
+						cardNumberSegments: [value]
+					}),
+					errorMessage: serverErrors.cardNumber
+				}) : props.brand ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardNumberSegmentsInput, {
 					value: props.formState.cardNumberSegments,
 					brand: props.brand,
 					onChange: (value) => props.setFormState({
@@ -14144,7 +14152,7 @@ function CardForm(props) {
 						cardNumberSegments: value
 					}),
 					errorMessage: serverErrors.cardNumber
-				})]
+				}) : null]
 			})
 		]
 	}) });
@@ -14209,7 +14217,7 @@ function CardPreview(props) {
 	});
 }
 //#endregion
-//#region src/components/CardRegisterComplete/SubmitButton.tsx
+//#region src/components/CardRegister/SubmitButton.tsx
 var spin$1 = keyframes`
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -14399,6 +14407,226 @@ function CardRegisterCompletePage(props) {
 	});
 }
 //#endregion
+//#region src/hooks/useCardList.ts
+function useCardList() {
+	const [fetchState, setFetchState] = (0, import_react.useState)({ status: "loading" });
+	const fetchCards = (0, import_react.useCallback)(() => {
+		fetch(`/react-payments/cards`).then((res) => {
+			if (!res.ok) throw new Error();
+			return res.json();
+		}).then((data) => setFetchState({
+			status: "success",
+			data
+		})).catch(() => setFetchState({ status: "error" }));
+	}, []);
+	(0, import_react.useEffect)(() => {
+		fetchCards();
+	}, [fetchCards]);
+	const retry = () => {
+		setFetchState({ status: "loading" });
+		fetchCards();
+	};
+	const handleDelete = async (id) => {
+		if (!window.confirm("카드를 삭제하시겠습니까?")) return;
+		if (!(await fetch(`/react-payments/cards/${id}`, { method: "DELETE" })).ok) {
+			alert("카드 삭제에 실패했습니다. 다시 시도해 주세요.");
+			return;
+		}
+		setFetchState((prev) => prev.status === "success" ? {
+			status: "success",
+			data: prev.data.filter((card) => card.id !== id)
+		} : prev);
+	};
+	return {
+		fetchState,
+		retry,
+		handleDelete
+	};
+}
+//#endregion
+//#region src/components/CardList/CardFetchError.tsx
+var ErrorWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+`;
+var ErrorIcon = styled.div`
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #333;
+  color: #fff;
+  font-size: 30px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+var ErrorTitle = styled.p`
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+`;
+var ErrorDescription = styled.p`
+  font-size: 12px;
+  color: #8c8c8c;
+  margin: 0;
+`;
+var RetryButton = styled.button`
+  margin-top: 8px;
+  width: 100%;
+  height: 52px;
+  background: #333;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+function CardFetchError({ onRetry }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(ErrorWrapper, { children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ErrorIcon, { children: "!" }),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ErrorTitle, { children: "카드 목록을 불러올 수 없습니다." }),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ErrorDescription, { children: "잠시 후 다시 시도해 주세요." }),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RetryButton, {
+			onClick: onRetry,
+			children: "다시 시도"
+		})
+	] });
+}
+//#endregion
+//#region src/components/CardList/CardList.tsx
+var ISSUER_INFO = {
+	"31": {
+		name: "BC카드",
+		color: "#E14F4F"
+	},
+	"41": {
+		name: "신한카드",
+		color: "#2563EB"
+	},
+	"15": {
+		name: "카카오뱅크",
+		color: "#F7E600"
+	},
+	"61": {
+		name: "현대카드",
+		color: "#333333"
+	},
+	W1: {
+		name: "우리카드",
+		color: "#59C2B0"
+	},
+	"71": {
+		name: "롯데카드",
+		color: "#E8453C"
+	},
+	"21": {
+		name: "하나카드",
+		color: "#3AB277"
+	},
+	"11": {
+		name: "국민카드",
+		color: "#9B59B6"
+	}
+};
+function formatCardNumber(masked) {
+	return `${masked.slice(0, 4)} **** **** ${masked.slice(-4)}`;
+}
+var List = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  overflow-y: auto;
+`;
+var CardItem = styled.li`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #e6e6e6;
+  border-radius: 5px;
+`;
+var CardThumbnail = styled.div`
+  width: 80px;
+  height: 50px;
+  border-radius: 5px;
+  background-color: ${({ color }) => color};
+  flex-shrink: 0;
+`;
+var CardInfo = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+var CardCompanyName = styled.span`
+  font-size: 14px;
+  font-weight: 700;
+`;
+var CardNumber = styled.span`
+  font-size: 13px;
+  color: #8c8c8c;
+`;
+var CardExpiry = styled.span`
+  font-size: 12px;
+  color: #8c8c8c;
+`;
+var DeleteButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #8c8c8c;
+  padding: 4px;
+  line-height: 1;
+  flex-shrink: 0;
+  &:hover {
+    color: #333;
+  }
+`;
+var AddCardButton = styled.button`
+  width: 100%;
+  height: 40px;
+  background-color: transparent;
+  border: 1px dashed #d9d9d9;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #8c8c8c;
+  cursor: pointer;
+`;
+function CardList({ cards, onDelete, onAddCard }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(List, { children: [cards.map((card) => {
+		const info = ISSUER_INFO[card.issuerCode];
+		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardItem, { children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardThumbnail, { color: info.color }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardInfo, { children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardCompanyName, { children: info.name }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardNumber, { children: formatCardNumber(card.number) }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardExpiry, { children: ["유효기간 ", card.expirationDate] })
+			] }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DeleteButton, {
+				onClick: () => onDelete(card.id),
+				children: "✕"
+			})
+		] }, card.id);
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AddCardButton, {
+		onClick: onAddCard,
+		children: "+ 카드 추가"
+	})] });
+}
+//#endregion
 //#region src/components/CardList/EmptyCardList.tsx
 var CardPlaceholder = styled.div`
   width: 160px;
@@ -14498,43 +14726,6 @@ function Spinner() {
 }
 //#endregion
 //#region src/pages/CardDashboardPage.tsx
-var ISSUER_INFO = {
-	"31": {
-		name: "BC카드",
-		color: "#E14F4F"
-	},
-	"41": {
-		name: "신한카드",
-		color: "#2563EB"
-	},
-	"15": {
-		name: "카카오뱅크",
-		color: "#F7E600"
-	},
-	"61": {
-		name: "현대카드",
-		color: "#333333"
-	},
-	W1: {
-		name: "우리카드",
-		color: "#59C2B0"
-	},
-	"71": {
-		name: "롯데카드",
-		color: "#E8453C"
-	},
-	"21": {
-		name: "하나카드",
-		color: "#3AB277"
-	},
-	"11": {
-		name: "국민카드",
-		color: "#9B59B6"
-	}
-};
-function formatCardNumber(masked) {
-	return `${masked.slice(0, 4)} **** **** ${masked.slice(-4)}`;
-}
 var View = styled.div`
   width: 100%;
   max-width: 376px;
@@ -14554,173 +14745,28 @@ var PageTitle = styled.h1`
   font-family: Noto Sans KR;
   line-height: 100%;
 `;
-var CardList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  flex: 1;
-  overflow-y: auto;
-`;
-var CardItem = styled.li`
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px;
-  border: 1px solid #e6e6e6;
-  border-radius: 5px;
-`;
-var CardThumbnail = styled.div`
-  width: 80px;
-  height: 50px;
-  border-radius: 5px;
-  background-color: ${({ color }) => color};
-  flex-shrink: 0;
-`;
-var CardInfo = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-`;
-var CardCompanyName = styled.span`
-  font-size: 14px;
-  font-weight: 700;
-`;
-var CardNumber = styled.span`
-  font-size: 13px;
-  color: #8c8c8c;
-`;
-var CardExpiry = styled.span`
-  font-size: 12px;
-  color: #8c8c8c;
-`;
-var DeleteButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  color: #8c8c8c;
-  padding: 4px;
-  line-height: 1;
-  flex-shrink: 0;
-  &:hover {
-    color: #333;
-  }
-`;
-var ErrorWrapper = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-`;
-var ErrorIcon = styled.div`
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background-color: #333;
-  color: #fff;
-  font-size: 30px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-var ErrorTitle = styled.p`
-  font-size: 20px;
-  font-weight: 700;
-  color: #333;
-  margin: 0;
-`;
-var ErrorDescription = styled.p`
-  font-size: 12px;
-  color: #8c8c8c;
-  margin: 0;
-`;
-var RetryButton = styled.button`
-  margin-top: 8px;
-  width: 100%;
-  height: 52px;
-  background: #333;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 700;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-`;
-var AddCardButton = styled.button`
-  width: 100%;
-  height: 40px;
-  background-color: transparent;
-  border: 1px dashed #d9d9d9;
-  border-radius: 4px;
-  text-align: center;
-  font-size: 13px;
-  font-weight: 700;
-  color: #8c8c8c;
-  cursor: pointer;
-`;
 function CardDashboardPage() {
 	const navigate = useNavigate();
-	const [fetchState, setFetchState] = (0, import_react.useState)({ status: "loading" });
-	const [fetchKey, setFetchKey] = (0, import_react.useState)(0);
-	(0, import_react.useEffect)(() => {
-		fetch(`/react-payments/cards`).then((res) => {
-			if (!res.ok) throw new Error();
-			return res.json();
-		}).then((data) => setFetchState({
-			status: "success",
-			data
-		})).catch(() => setFetchState({ status: "error" }));
-	}, [fetchKey]);
+	const { fetchState, retry, handleDelete } = useCardList();
 	const handleRetry = () => {
 		navigate("/cards");
-		setFetchState({ status: "loading" });
-		setFetchKey((k) => k + 1);
+		retry();
 	};
-	const handleDelete = async (id) => {
-		if (!window.confirm("카드를 삭제하시겠습니까?")) return;
-		await fetch(`/react-payments/cards/${id}`, { method: "DELETE" });
-		setFetchState((prev) => prev.status === "success" ? {
-			status: "success",
-			data: prev.data.filter((card) => card.id !== id)
-		} : prev);
-	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(View, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(PageTitle, { children: [
-		"보유 카드 (",
-		fetchState.status === "success" ? fetchState.data.length : 0,
-		")"
-	] }), fetchState.status === "loading" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Spinner, {}) : fetchState.status === "error" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(ErrorWrapper, { children: [
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ErrorIcon, { children: "!" }),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ErrorTitle, { children: "카드 목록을 불러올 수 없습니다." }),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ErrorDescription, { children: "잠시 후 다시 시도해 주세요." }),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RetryButton, {
-			onClick: handleRetry,
-			children: "다시 시도"
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(View, { children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(PageTitle, { children: [
+			"보유 카드 (",
+			fetchState.status === "success" ? fetchState.data.length : 0,
+			")"
+		] }),
+		fetchState.status === "loading" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Spinner, {}),
+		fetchState.status === "error" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardFetchError, { onRetry: handleRetry }),
+		fetchState.status === "success" && fetchState.data.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmptyCardList, {}),
+		fetchState.status === "success" && fetchState.data.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardList, {
+			cards: fetchState.data,
+			onDelete: handleDelete,
+			onAddCard: () => navigate("/cards/register")
 		})
-	] }) : fetchState.data.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmptyCardList, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardList, { children: [fetchState.data.map((card) => {
-		const info = ISSUER_INFO[card.issuerCode];
-		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardItem, { children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardThumbnail, { color: info.color }),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardInfo, { children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardCompanyName, { children: info.name }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardNumber, { children: formatCardNumber(card.number) }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardExpiry, { children: ["유효기간 ", card.expirationDate] })
-			] }),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DeleteButton, {
-				onClick: () => handleDelete(card.id),
-				children: "✕"
-			})
-		] }, card.id);
-	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AddCardButton, {
-		onClick: () => navigate("/cards/register"),
-		children: "+ 카드 추가"
-	})] })] });
+	] });
 }
 //#endregion
 //#region src/hooks/useCardNumberSegments.ts
@@ -14832,7 +14878,7 @@ function App() {
 //#region src/main.tsx
 async function enableMocking() {
 	const { worker } = await __vitePreload(async () => {
-		const { worker } = await import("./browser-OHgngQBA.js");
+		const { worker } = await import("./browser-6XTNpmxc.js");
 		return { worker };
 	}, []);
 	return worker.start({
