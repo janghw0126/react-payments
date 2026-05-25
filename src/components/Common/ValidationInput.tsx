@@ -1,97 +1,92 @@
-import {
-  useEffect,
-  useState,
-  type ChangeEvent,
-  type ComponentProps,
-} from "react";
-import styled from "@emotion/styled";
+import { useState, type ChangeEvent, type InputHTMLAttributes } from "react";
 import Flex from "./Flex";
-import InputErrorMessage from "./InputErrorMessage";
+import styled from "@emotion/styled";
 
-const Input = styled.input<{ $hasError: boolean }>`
+interface Validation {
+  type: string;
+  validator: (input: string) => boolean;
+  message: string;
+}
+
+interface ValidationInputProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "onChange"
+> {
+  value: string;
+  onChange: (value: string) => void;
+  validations: Validation[];
+}
+
+const ErrorMessage = styled.span`
+  font-size: 11px;
+  color: var(--color-error);
+`;
+
+const Input = styled.input<{ $isError: boolean }>`
   width: 100%;
   font-size: 13px;
   border-radius: 2px;
   padding: 8px 6px;
   border: 1px solid
-    ${({ $hasError }) =>
-      $hasError ? "var(--color-error)" : "var(--color-border)"};
+    ${({ $isError }) =>
+      $isError ? "var(--color-error)" : "var(--color-border)"};
 
   :focus {
-    border: 1px solid var(--color-black);
+    border: 1px solid
+      ${({ $isError }) =>
+        $isError ? "var(--color-error)" : "var(--color-black)"};
     outline: 0;
   }
 `;
 
-interface ValidationInputProps extends ComponentProps<"input"> {
-  validations: {
-    type: "validateOnChange" | "validateOnBlur";
-    validator: (input: string) => boolean;
-    message: string;
-  }[];
-  onChangeError?: (error: Error | null) => void;
-  isShowError?: boolean;
-}
-
-export default function ValidationInput({
-  validations,
+function ValidationInput({
+  value,
   onChange,
-  onBlur,
-  ...props
+  validations,
+  ...rest
 }: ValidationInputProps) {
-  const [inputError, setInputError] = useState<null | Error>(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  useEffect(() => {
-    props.onChangeError?.(inputError);
-  }, [inputError]);
-
-  const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const failedValidation = validations.find(
-      (validation) =>
-        event.target.value.length &&
+  const handleOnchange = (event: ChangeEvent<HTMLInputElement>) => {
+    const failValidation = validations.find(
+      (validation: Validation) =>
         validation.type === "validateOnChange" &&
         !validation.validator(event.target.value),
     );
 
-    if (failedValidation) {
-      setInputError(new Error(failedValidation.message));
-      return;
+    if (failValidation) {
+      setErrorMessage(failValidation.message);
+    } else {
+      onChange?.(event.target.value);
+      setErrorMessage("");
     }
-
-    setInputError(null);
-    onChange?.(event);
   };
 
-  const handleOnBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
-    onBlur?.(event);
-
-    const failedValidation = validations.find(
+  const handleOnBlur = () => {
+    const failValidation = validations.find(
       (validation) =>
-        typeof props.value === "string" &&
-        props.value.length &&
-        validation.type === "validateOnBlur" &&
-        !validation.validator(props.value),
+        validation.type === "validateOnBlur" && !validation.validator(value),
     );
 
-    if (failedValidation) {
-      setInputError(new Error(failedValidation.message));
-      return;
+    if (failValidation) {
+      setErrorMessage(failValidation.message);
+    } else {
+      setErrorMessage("");
     }
-
-    setInputError(null);
   };
 
   return (
     <Flex direction="column" gap={10}>
       <Input
-        $hasError={!!inputError}
-        {...props}
-        onChange={handleOnChange}
+        {...rest}
+        value={value}
+        onChange={handleOnchange}
         onBlur={handleOnBlur}
+        $isError={!!errorMessage}
       />
-      {props.isShowError && (
-        <InputErrorMessage>{inputError?.message}</InputErrorMessage>
-      )}
+      {!!errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </Flex>
   );
 }
+
+export default ValidationInput;

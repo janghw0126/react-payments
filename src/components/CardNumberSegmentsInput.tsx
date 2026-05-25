@@ -1,4 +1,3 @@
-import { type ChangeEvent } from "react";
 import ValidationInput from "./Common/ValidationInput";
 import {
   validateNumberString,
@@ -15,10 +14,9 @@ interface CardNumberSegmentsInputProps {
 }
 
 function CardNumberSegmentsInput(props: CardNumberSegmentsInputProps) {
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const inputIndex = Number(event.target.dataset.index);
+  const handleChange = (index: number) => (value: string) => {
     const newSegments = [...props.value] as CardNumberSegments;
-    newSegments.splice(inputIndex, 1, event.target.value);
+    newSegments.splice(index, 1, value);
     props.onChange(newSegments);
   };
 
@@ -29,13 +27,11 @@ function CardNumberSegmentsInput(props: CardNumberSegmentsInputProps) {
         {props.value.map((el, index) => (
           <ValidationInput
             key={index}
-            data-index={index}
             type="text"
             inputMode="numeric"
             placeholder="1234"
             value={el}
-            onChange={handleChange}
-            isShowError={true}
+            onChange={handleChange(index)}
             validations={[
               {
                 type: "validateOnChange",

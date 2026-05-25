@@ -1,4 +1,3 @@
-import { type ChangeEvent } from "react";
 import type { CardFormState } from "../types";
 import ValidationInput from "./Common/ValidationInput";
 import Flex from "./Common/Flex";
@@ -17,12 +16,12 @@ interface CardExpiryDateInputProps {
 }
 
 export default function CardExpiryDateInput(props: CardExpiryDateInputProps) {
-  const handleChangeMonth = (event: ChangeEvent<HTMLInputElement>) => {
-    props.onChange([event.target.value, props.value.expiryYear]);
+  const handleChangeMonth = (value: string) => {
+    props.onChange([value, props.value.expiryYear]);
   };
 
-  const handleChangeYear = (event: ChangeEvent<HTMLInputElement>) => {
-    props.onChange([props.value.expiryMonth, event.target.value]);
+  const handleChangeYear = (value: string) => {
+    props.onChange([props.value.expiryMonth, value]);
   };
 
   return (
@@ -36,7 +35,6 @@ export default function CardExpiryDateInput(props: CardExpiryDateInputProps) {
           placeholder="MM"
           value={props.value.expiryMonth}
           onChange={handleChangeMonth}
-          isShowError={true}
           validations={[
             {
               type: "validateOnChange",
@@ -67,7 +65,6 @@ export default function CardExpiryDateInput(props: CardExpiryDateInputProps) {
           placeholder="YY"
           value={props.value.expiryYear}
           onChange={handleChangeYear}
-          isShowError={true}
           validations={[
             {
               type: "validateOnChange",
